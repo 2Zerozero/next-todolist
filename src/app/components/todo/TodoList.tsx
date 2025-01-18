@@ -12,7 +12,7 @@ interface TodoListProps {
 
 const TodoList = ({ title, todos, onUpdateTodo }: TodoListProps) => {
   return (
-    <div className="flex flex-col items-start w-full gap-5 min-h-[500px]">
+    <div className="flex flex-col items-start w-full gap-5 min-h-[600px]">
       {/* 제목 */}
       <h2>
         <Image src={`/icon/${title}.svg`} alt={title} width={102} height={36} />

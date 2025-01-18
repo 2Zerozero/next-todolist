@@ -1,7 +1,7 @@
 'use client';
 
 import { TodoListItem, UpdateTodoRequest } from '@/app/lib/types/types';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Type
 interface TodoItemProps {
@@ -11,21 +11,23 @@ interface TodoItemProps {
 
 const TodoItem = ({ todo, onUpdateTodo }: TodoItemProps) => {
   // 상태 관리
-  const [isChecked, setIsChecked] = useState(todo.isCompleted);
+  const [isChecked, setIsChecked] = useState<boolean>(todo.isCompleted);
 
-  // 할 일 상태 변경
+  // useEffect를 사용하여 todo.isCompleted가 변경될 때 상태 업데이트
+  useEffect(() => {
+    setIsChecked(todo.isCompleted);
+  }, [todo.isCompleted]);
+
+  // 할 일 상태 변경 handler
   const handleCheckboxChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const newStatus = e.target.checked;
     setIsChecked(newStatus);
 
     try {
-      const updateData = {
+      await onUpdateTodo({
         id: todo.id,
         isCompleted: newStatus,
-      };
-
-      console.log('Update data:', updateData); // 디버깅용
-      await onUpdateTodo(updateData);
+      });
     } catch (error) {
       setIsChecked(!newStatus);
       console.error('Failed to update todo status:', error);
