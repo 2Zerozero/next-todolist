@@ -24,28 +24,36 @@ const buttonVariants = cva(
       variant: 'primary',
       intent: 'add',
     },
-  }
+  },
 );
 
 // 버튼 컴포넌트 속성
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
+interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
   label?: string;
   icon: React.ReactNode;
 }
 
 // 버튼 컴포넌트
-export function Button({ label, intent, className, icon, ...props }: ButtonProps) {
+export function Button({
+  label,
+  intent,
+  className,
+  icon,
+  ...props
+}: ButtonProps) {
   return (
     <div className="relative">
       {/* 그림자 역할 */}
       <div
         className={cn(
-          'absolute rounded-full -z-10 top-1 left-1',
+          'absolute left-1 top-1 -z-10 rounded-full',
           // 사이즈
-          'w-[55px] h-[52px]',
+          'h-[52px] w-[55px]',
           'sm:w-[164px]',
           // 색상
-          'bg-slate-900'
+          'bg-slate-900',
         )}
       />
 
@@ -53,7 +61,7 @@ export function Button({ label, intent, className, icon, ...props }: ButtonProps
       <button className={cn(buttonVariants({ intent }), className)} {...props}>
         <div className="flex items-center justify-center gap-1">
           <div className="flex items-center justify-center">{icon}</div>
-          <span className="hidden md:inline-block">{label}</span>
+          <span className="hidden sm:inline-block">{label}</span>
         </div>
       </button>
     </div>
