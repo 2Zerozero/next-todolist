@@ -1,8 +1,30 @@
 import { API_URL } from '.';
 import { CreateTodoRequest, TodoListItem } from '../../types/types';
 
+// Todo 생성
+export const createTodo = async (request: CreateTodoRequest): Promise<CreateTodoRequest> => {
+  try {
+    const response = await fetch(`${API_URL}/items`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(request),
+    });
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`);
+    }
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 // Todo 목록 조회
-export const getTodos = async (): Promise<CreateTodoRequest[]> => {
+export const getTodos = async (): Promise<TodoListItem[]> => {
   try {
     const response = await fetch(`${API_URL}/items`, {
       method: 'GET',
