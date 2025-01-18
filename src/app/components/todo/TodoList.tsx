@@ -12,10 +12,10 @@ interface TodoListProps {
 
 const TodoList = ({ title, todos, onUpdateTodo }: TodoListProps) => {
   return (
-    <div className="flex flex-col items-start w-full gap-5 min-h-[600px]">
+    <div className="flex min-h-[600px] w-full flex-col items-start gap-5">
       {/* 제목 */}
-      <h2>
-        <Image src={`/icon/${title}.svg`} alt={title} width={102} height={36} />
+      <h2 className="flex h-10 items-center justify-center gap-2">
+        <Image src={`/icon/${title}.svg`} alt={title} width={100} height={36} />
       </h2>
       {/* 할 일 리스트 */}
       {todos.map((todo) => (
