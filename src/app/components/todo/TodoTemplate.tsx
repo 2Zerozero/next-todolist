@@ -75,7 +75,7 @@ const TodoTemplate = () => {
       {/* 할 일 생성 */}
       <TodoInput onCreateTodo={handleCreateTodo} />
       {/* 할 일 리스트 */}
-      <div className="flex h-full w-full flex-col items-center justify-center gap-6 md:flex-row">
+      <div className="flex w-full flex-col items-start gap-6 md:flex-row">
         <TodoList
           title="Todo"
           todos={uncompletedTodos}
