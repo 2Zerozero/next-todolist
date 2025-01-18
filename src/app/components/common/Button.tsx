@@ -43,7 +43,7 @@ export function Button({ label, intent, className, icon, ...props }: ButtonProps
           'absolute rounded-full -z-10 top-1 left-1',
           // 사이즈
           'w-[55px] h-[52px]',
-          'md:w-[164px]',
+          'sm:w-[164px]',
           // 색상
           'bg-slate-900'
         )}

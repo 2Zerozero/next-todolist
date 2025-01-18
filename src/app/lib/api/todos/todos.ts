@@ -1,8 +1,14 @@
 import { API_URL } from '.';
-import { CreateTodoRequest, TodoListItem, UpdateTodoRequest } from '../../types/types';
+import {
+  CreateTodoRequest,
+  TodoListItem,
+  UpdateTodoRequest,
+} from '../../types/types';
 
 // Todo 생성
-export const createTodo = async (request: CreateTodoRequest): Promise<CreateTodoRequest> => {
+export const createTodo = async (
+  request: CreateTodoRequest,
+): Promise<TodoListItem> => {
   try {
     const response = await fetch(`${API_URL}/items`, {
       method: 'POST',
@@ -14,7 +20,9 @@ export const createTodo = async (request: CreateTodoRequest): Promise<CreateTodo
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `HTTP error! status: ${response.status} ${response.statusText}`,
+      );
     }
     return data;
   } catch (error) {
@@ -24,7 +32,9 @@ export const createTodo = async (request: CreateTodoRequest): Promise<CreateTodo
 };
 
 // Todo 수정
-export const updateTodo = async (request: UpdateTodoRequest): Promise<UpdateTodoRequest> => {
+export const updateTodo = async (
+  request: UpdateTodoRequest,
+): Promise<UpdateTodoRequest> => {
   try {
     const { id, ...updateData } = request; // id를 분리
     const response = await fetch(`${API_URL}/items/${id}`, {
@@ -37,7 +47,9 @@ export const updateTodo = async (request: UpdateTodoRequest): Promise<UpdateTodo
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `HTTP error! status: ${response.status} ${response.statusText}`,
+      );
     }
     return data;
   } catch (error) {
@@ -58,7 +70,9 @@ export const getTodos = async (): Promise<TodoListItem[]> => {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `HTTP error! status: ${response.status} ${response.statusText}`,
+      );
     }
     return data;
   } catch (error) {
@@ -79,7 +93,9 @@ export const getTodo = async (itemId: number): Promise<TodoListItem> => {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `HTTP error! status: ${response.status} ${response.statusText}`,
+      );
     }
     return data;
   } catch (error) {
