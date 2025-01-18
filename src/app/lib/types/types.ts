@@ -18,7 +18,7 @@ export type TodoListItem = Pick<Todo, 'id' | 'name' | 'isCompleted'>;
 export type CreateTodoRequest = Pick<Todo, 'name'>;
 
 // 수정시 사용되는 타입
-export type UpdateTodoRequest = Pick<Todo, 'name' | 'memo' | 'imageUrl' | 'isCompleted'>;
+export type UpdateTodoRequest = { id: number } & Partial<Pick<Todo, 'name' | 'memo' | 'imageUrl' | 'isCompleted'>>;
 
 // Image
 export type Image = {
