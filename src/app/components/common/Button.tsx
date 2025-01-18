@@ -11,7 +11,7 @@ const buttonVariants = cva(
       variant: {
         primary: [
           'w-[55px] h-[52px]', // 모바일
-          'md:w-[164px]', // 데스크탑
+          'sm:w-[164px]', // 데스크탑
         ],
       },
       intent: {
