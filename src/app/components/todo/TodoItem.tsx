@@ -64,7 +64,7 @@ const TodoItem = ({ todo, onUpdateTodo }: TodoItemProps) => {
           onChange={handleCheckboxChange}
           checked={isChecked}
         />
-        <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-slate-900 peer-checked:border-none peer-checked:bg-violet-600">
+        <div className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 border-slate-900 peer-checked:border-none peer-checked:bg-violet-600">
           {isChecked && (
             <Image src="/icon/Check.svg" alt="Check" width={20} height={14} />
           )}
