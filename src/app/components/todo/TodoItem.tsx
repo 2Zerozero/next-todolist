@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { TodoListItem, UpdateTodoRequest } from '@/app/lib/types/types';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 // Type
 interface TodoItemProps {
@@ -12,6 +13,7 @@ interface TodoItemProps {
 }
 
 const TodoItem = ({ todo, onUpdateTodo }: TodoItemProps) => {
+  const router = useRouter();
   // 상태 관리
   const [isChecked, setIsChecked] = useState<boolean>(todo.isCompleted);
 
@@ -20,10 +22,11 @@ const TodoItem = ({ todo, onUpdateTodo }: TodoItemProps) => {
     setIsChecked(todo.isCompleted);
   }, [todo.isCompleted]);
 
-  // 할 일 상태 변경 handler
+  // Handler
   const handleCheckboxChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
+    e.stopPropagation(); // 이벤트 버블링 방지
     const newStatus = e.target.checked;
     setIsChecked(newStatus);
 
@@ -38,15 +41,23 @@ const TodoItem = ({ todo, onUpdateTodo }: TodoItemProps) => {
     }
   };
 
+  const handleRouteClick = () => {
+    router.push(`/todo/${todo.id}`);
+  };
+
   return (
     <div
       className={cn(
-        `flex h-[50px] w-full items-center justify-start rounded-full border-2 border-slate-900 pl-2`,
+        `flex h-[50px] w-full items-center justify-start gap-3 rounded-full border-2 border-slate-900 pl-2`,
         `${isChecked ? 'bg-violet-100' : 'bg-white'}`,
       )}
+      onClick={handleRouteClick}
     >
-      <label className="flex items-center justify-center gap-3">
-        {/* 체크 박스 */}
+      {/* 체크 박스 */}
+      <label
+        className="flex items-center justify-center"
+        onClick={(e) => e.stopPropagation()}
+      >
         <input
           type="checkbox"
           className="peer hidden"
@@ -58,9 +69,12 @@ const TodoItem = ({ todo, onUpdateTodo }: TodoItemProps) => {
             <Image src="/icon/Check.svg" alt="Check" width={20} height={14} />
           )}
         </div>
-        {/* 할 일 제목 */}
-        <span className="peer-checked:line-through">{todo.name}</span>
       </label>
+
+      {/* 할 일 제목 */}
+      <span className={cn(isChecked && 'text-slate-500 line-through')}>
+        {todo.name}
+      </span>
     </div>
   );
 };
