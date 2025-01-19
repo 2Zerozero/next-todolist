@@ -9,66 +9,71 @@ import { createTodo, getTodos, updateTodo } from '@/app/lib/api/todos';
 import React, { useEffect, useState } from 'react';
 import TodoList from './TodoList';
 import TodoInput from './TodoInput';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 const TodoTemplate = () => {
-  // 상태관리
-  const [todos, setTodos] = useState<TodoListItem[]>([]);
+  const queryClient = useQueryClient();
+
+  // 할 일 목록 조회
+  const { data: todos = [], isLoading } = useQuery({
+    queryKey: ['todos'],
+    queryFn: getTodos,
+  });
+
   const completedTodos = todos.filter((todo) => todo.isCompleted);
   const uncompletedTodos = todos.filter((todo) => !todo.isCompleted);
 
-  // 할 일 목록 조회
-  const fetchTodos = async () => {
-    try {
-      const data = await getTodos();
-      setTodos(data);
-    } catch (error) {
-      console.error('Failed to fetch todos:', error);
-    }
-  };
+  // Mutation
+  // 할 일 생성
+  const createTodoMutation = useMutation({
+    mutationFn: createTodo,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['todos'] });
+    },
+  });
+
+  // 할 일 수정
+  const updateTodoMutation = useMutation({
+    mutationFn: updateTodo,
+    onMutate: async (newTodo) => {
+      // 낙관적 업데이트
+      await queryClient.cancelQueries({ queryKey: ['todos'] });
+      const previousTodos = queryClient.getQueryData(['todos']);
+
+      queryClient.setQueryData(['todos'], (old: TodoListItem[]) =>
+        old.map((todo) =>
+          todo.id === newTodo.id ? { ...todo, ...newTodo } : todo,
+        ),
+      );
+
+      return { previousTodos };
+    },
+    onError: (err, newTodo, context) => {
+      // 에러시 롤백
+      queryClient.setQueryData(['todos'], context?.previousTodos);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['todos'] });
+    },
+  });
 
   // Handler
-  // 할 일 생성
   const handleCreateTodo = async (newTodo: CreateTodoRequest) => {
     try {
-      // 1. createTodo API 호출하고 결과 대기
-      const createdTodo = await createTodo(newTodo);
-
-      // 2. 성공하면 새로운 todo를 현재 목록에 추가
-      setTodos((prev) => [...prev, createdTodo]); // 기존 목록에 새 항목 추가
+      await createTodoMutation.mutateAsync(newTodo);
     } catch (error) {
       console.error('Failed to create todo:', error);
     }
   };
 
-  // 할 일 수정
   const handleUpdateTodo = async (updatedTodo: UpdateTodoRequest) => {
-    // 낙관적 업데이트: 즉시 UI 반영
-    setTodos((prevTodos) =>
-      prevTodos.map((todo) =>
-        todo.id === updatedTodo.id
-          ? { ...todo, ...updatedTodo } // 모든 기존 속성 유지하면서 업데이트
-          : todo,
-      ),
-    );
-
     try {
-      await updateTodo(updatedTodo);
+      await updateTodoMutation.mutateAsync(updatedTodo);
     } catch (error) {
-      // 실패 시 원래 상태로 복구
-      setTodos((prevTodos) =>
-        prevTodos.map((todo) =>
-          todo.id === updatedTodo.id
-            ? { ...todo, isCompleted: !updatedTodo.isCompleted }
-            : todo,
-        ),
-      );
       console.error('Failed to update todo:', error);
     }
   };
-  // 컴포넌트 마운트 시 할 일 목록 조회
-  useEffect(() => {
-    fetchTodos();
-  }, []);
 
   return (
     <div className="flex w-[1200px] flex-col items-center justify-center gap-10">

@@ -1,6 +1,7 @@
 import { API_URL } from '.';
 import {
   CreateTodoRequest,
+  Todo,
   TodoListItem,
   UpdateTodoRequest,
 } from '../../types/types';
@@ -82,7 +83,7 @@ export const getTodos = async (): Promise<TodoListItem[]> => {
 };
 
 // Todo 상세 목록 조회
-export const getTodo = async (itemId: number): Promise<TodoListItem> => {
+export const getTodo = async (itemId: number): Promise<Todo> => {
   try {
     const response = await fetch(`${API_URL}/items/${itemId}`, {
       method: 'GET',
