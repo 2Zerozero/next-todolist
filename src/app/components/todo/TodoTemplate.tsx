@@ -6,7 +6,7 @@ import {
   UpdateTodoRequest,
 } from '@/app/lib/types/types';
 import { createTodo, getTodos, updateTodo } from '@/app/lib/api/todos';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import TodoList from './TodoList';
 import TodoInput from './TodoInput';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
