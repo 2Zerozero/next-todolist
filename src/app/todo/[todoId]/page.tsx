@@ -1,13 +1,15 @@
 'use client';
 
 import { Button } from '@/app/components/common/Button';
-import { getTodo, updateTodo } from '@/app/lib/api/todos';
-import { CheckIcon, XMarkIcon } from '@heroicons/react/16/solid';
+import { getTodo, updateTodo, uploadImage } from '@/app/lib/api/todos';
+import { CheckIcon, PlusIcon, XMarkIcon } from '@heroicons/react/16/solid';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import TodoDetailHeader from '@/app/components/todo-detail/TodoDetailHeader';
+import TodoHeader from '@/app/components/todo-detail/TodoHeader';
 import { Todo } from '@/app/lib/types/types';
+import TodoDetailMemo from '@/app/components/todo-detail/TodoMemo';
+import TodoImageUpload from '@/app/components/todo-detail/TodoImageUpload';
 
 const TodoPage = () => {
   const [isChecked, setIsChecked] = useState(false);
@@ -42,12 +44,21 @@ const TodoPage = () => {
     <div className="flex flex-col items-center justify-center">
       <div className="flex w-[1024px] flex-col items-center justify-center px-4">
         {/* 투두 상세 페이지 헤더 */}
-        <TodoDetailHeader
+        <TodoHeader
           todo={todo as Todo}
           isChecked={isChecked}
           onCheckboxChange={handleCheckboxChange}
         />
         {/* 투두 상세 페이지 내용 */}
+        <div className="flex w-full justify-between gap-4">
+          {/* 이미지 업로드 */}
+          <TodoImageUpload
+            todoId={Number(todoId)}
+            initialImageUrl={todo.imageUrl}
+          />
+          {/* 메모 */}
+          <TodoDetailMemo />
+        </div>
         {/* 버튼 */}
         <div className="flex gap-5">
           <Button

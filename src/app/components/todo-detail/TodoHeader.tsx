@@ -4,17 +4,13 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { Todo } from '@/app/lib/types/types';
 
-interface TodoDetailHeaderProps {
+interface TodoHeaderProps {
   todo: Todo;
   isChecked: boolean;
   onCheckboxChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const TodoDetailHeader = ({
-  todo,
-  isChecked,
-  onCheckboxChange,
-}: TodoDetailHeaderProps) => {
+const TodoHeader = ({ todo, isChecked, onCheckboxChange }: TodoHeaderProps) => {
   return (
     <div
       className={cn(
@@ -40,4 +36,4 @@ const TodoDetailHeader = ({
   );
 };
 
-export default TodoDetailHeader;
+export default TodoHeader;

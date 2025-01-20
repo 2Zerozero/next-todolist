@@ -20,8 +20,16 @@ export const uploadImage = async (image: File): Promise<Image> => {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `HTTP error! status: ${response.status} ${response.statusText}`,
+      );
     }
+
+    // API 응답이 { "url": "string" } 형식인지 확인
+    if (!data.url) {
+      throw new Error('Invalid response format');
+    }
+
     return data;
   } catch (error) {
     console.error(error);
