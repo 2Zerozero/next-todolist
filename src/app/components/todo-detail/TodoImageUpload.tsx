@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import ImageButton from './ImageButton';
 import Image from 'next/image';
 import { PencilIcon, PlusIcon } from '@heroicons/react/16/solid';
@@ -10,13 +10,24 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 interface TodoImageUploadProps {
   todoId: number;
   initialImageUrl?: string;
+  onImageUrlChange: (url: string | undefined) => void;
 }
 
-const TodoImageUpload = ({ todoId, initialImageUrl }: TodoImageUploadProps) => {
+const TodoImageUpload = ({
+  todoId,
+  initialImageUrl,
+  onImageUrlChange,
+}: TodoImageUploadProps) => {
   const [imageUrl, setImageUrl] = useState<string | undefined>(initialImageUrl);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
 
+  // imageUrl이 변경될 때마다 부모에게 알림
+  useEffect(() => {
+    onImageUrlChange(imageUrl);
+  }, [imageUrl, onImageUrlChange]);
+
+  // Mutation
   const uploadImageMutation = useMutation({
     mutationFn: async (file: File) => {
       const imageData = await uploadImage(file);
@@ -46,6 +57,7 @@ const TodoImageUpload = ({ todoId, initialImageUrl }: TodoImageUploadProps) => {
     fileInputRef.current?.click();
   };
 
+  console.log(imageUrl);
   return (
     <div className="relative flex h-[312px] w-[384px] items-center justify-center rounded-3xl border-2 border-dashed border-slate-300 bg-slate-50">
       <input

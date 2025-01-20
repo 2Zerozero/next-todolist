@@ -4,17 +4,20 @@ import { Button } from '@/app/components/common/Button';
 import { getTodo, updateTodo, uploadImage } from '@/app/lib/api/todos';
 import { CheckIcon, PlusIcon, XMarkIcon } from '@heroicons/react/16/solid';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import TodoHeader from '@/app/components/todo-detail/TodoHeader';
 import { Todo } from '@/app/lib/types/types';
-import TodoDetailMemo from '@/app/components/todo-detail/TodoMemo';
 import TodoImageUpload from '@/app/components/todo-detail/TodoImageUpload';
+import TodoMemo from '@/app/components/todo-detail/TodoMemo';
 
 const TodoPage = () => {
   const [isChecked, setIsChecked] = useState(false);
   const { todoId } = useParams();
   const queryClient = useQueryClient();
+  const [imageUrl, setImageUrl] = useState<string | undefined>();
+  const [memo, setMemo] = useState<string>('');
+  const router = useRouter();
 
   // Todo 상세 정보 조회
   const { data: todo, isLoading } = useQuery({
@@ -31,10 +34,32 @@ const TodoPage = () => {
   }, [todo]);
 
   // Mutation
+  const updateTodoMutation = useMutation({
+    mutationFn: () => {
+      return updateTodo({
+        id: Number(todoId),
+        memo: memo,
+        imageUrl: imageUrl,
+        isCompleted: isChecked,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['todo', todoId] });
+    },
+  });
 
   // Handler
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(e.target.checked);
+  };
+
+  const handleUpdateClick = async () => {
+    try {
+      await updateTodoMutation.mutateAsync();
+      router.push('/');
+    } catch (error) {
+      console.error('Failed to update todo:', error);
+    }
   };
 
   if (isLoading) return <div></div>;
@@ -55,16 +80,18 @@ const TodoPage = () => {
           <TodoImageUpload
             todoId={Number(todoId)}
             initialImageUrl={todo.imageUrl}
+            onImageUrlChange={setImageUrl}
           />
           {/* 메모 */}
-          <TodoDetailMemo />
+          <TodoMemo initialMemo={todo?.memo} onChange={setMemo} />
         </div>
         {/* 버튼 */}
-        <div className="flex gap-5">
+        <div className="flex w-full items-center justify-end gap-5">
           <Button
             label="수정 완료"
             icon={<CheckIcon className="h-6 w-6" />}
             intent="edit"
+            onClick={handleUpdateClick}
           />
           <Button
             label="삭제하기"

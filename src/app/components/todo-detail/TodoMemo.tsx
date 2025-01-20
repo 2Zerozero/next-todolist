@@ -1,7 +1,22 @@
-import { cn } from '@/lib/utils';
-import React from 'react';
+'use client';
 
-const TodoMemo = () => {
+import React, { useState } from 'react';
+import { cn } from '@/lib/utils';
+
+interface TodoMemoProps {
+  initialMemo?: string;
+  onChange: (memo: string) => void;
+}
+
+const TodoMemo = ({ initialMemo, onChange }: TodoMemoProps) => {
+  const [memo, setMemo] = useState(initialMemo || '');
+
+  const handleMemoChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newMemo = e.target.value;
+    setMemo(newMemo);
+    onChange(newMemo);
+  };
+
   return (
     <div
       className={cn(
@@ -13,7 +28,9 @@ const TodoMemo = () => {
       <textarea
         className="h-full w-full resize-none items-center border-none bg-transparent p-5 text-center outline-none"
         placeholder="메모를 입력해주세요."
-      ></textarea>
+        value={memo}
+        onChange={handleMemoChange}
+      />
     </div>
   );
 };
