@@ -1,7 +1,12 @@
 'use client';
 
 import { Button } from '@/app/components/common/Button';
-import { getTodo, updateTodo, uploadImage } from '@/app/lib/api/todos';
+import {
+  deleteTodo,
+  getTodo,
+  updateTodo,
+  uploadImage,
+} from '@/app/lib/api/todos';
 import { CheckIcon, PlusIcon, XMarkIcon } from '@heroicons/react/16/solid';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams, useRouter } from 'next/navigation';
@@ -62,6 +67,14 @@ const TodoPage = () => {
     }
   };
 
+  const handleDeleteClick = async () => {
+    try {
+      await deleteTodo(Number(todoId));
+      router.push('/');
+    } catch (error) {
+      console.error('Failed to delete todo:', error);
+    }
+  };
   if (isLoading) return <div></div>;
   if (!todo) return <div></div>;
 
@@ -97,6 +110,7 @@ const TodoPage = () => {
             label="삭제하기"
             icon={<XMarkIcon className="h-6 w-6" />}
             intent="delete"
+            onClick={handleDeleteClick}
           />
         </div>
       </div>

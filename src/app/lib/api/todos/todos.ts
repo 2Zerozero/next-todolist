@@ -108,6 +108,14 @@ export const getTodo = async (itemId: number): Promise<Todo> => {
 // Todo 항목 삭제
 export const deleteTodo = async (itemId: number) => {
   try {
+    const response = await fetch(`${API_URL}/items/${itemId}`, {
+      method: 'DELETE',
+    });
+    if (!response.ok) {
+      throw new Error(
+        `HTTP error! status: ${response.status} ${response.statusText}`,
+      );
+    }
   } catch (error) {
     console.error(error);
     throw error;
