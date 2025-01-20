@@ -59,7 +59,7 @@ const TodoImageUpload = ({
 
   console.log(imageUrl);
   return (
-    <div className="relative flex h-[312px] w-[384px] items-center justify-center rounded-3xl border-2 border-dashed border-slate-300 bg-slate-50">
+    <div className="relative flex h-[312px] w-full items-center justify-center rounded-3xl border-2 border-dashed border-slate-300 bg-slate-50 lg:max-w-[384px]">
       <input
         ref={fileInputRef}
         type="file"
@@ -70,7 +70,7 @@ const TodoImageUpload = ({
       />
 
       {imageUrl ? (
-        <div className="relative h-full w-full">
+        <div className="relative h-full w-full lg:max-w-[384px]">
           <Image
             src={imageUrl}
             alt="업로드된 이미지"

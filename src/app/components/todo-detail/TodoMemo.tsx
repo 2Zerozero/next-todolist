@@ -20,13 +20,13 @@ const TodoMemo = ({ initialMemo, onChange }: TodoMemoProps) => {
   return (
     <div
       className={cn(
-        'flex h-[312px] flex-1 flex-col items-center p-4',
+        'flex h-[312px] w-full flex-col items-center p-4',
         "bg-[url('/todo/MemoBg.svg')] bg-cover",
       )}
     >
       <h2 className="font-bold text-amber-800">Memo</h2>
       <textarea
-        className="h-full w-full resize-none items-center border-none bg-transparent p-5 text-center outline-none"
+        className="flex h-full w-full flex-1 resize-none items-center border-none bg-transparent p-5 text-center outline-none"
         placeholder="메모를 입력해주세요."
         value={memo}
         onChange={handleMemoChange}

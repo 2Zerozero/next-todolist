@@ -66,8 +66,8 @@ const TodoPage = () => {
   if (!todo) return <div></div>;
 
   return (
-    <div className="flex flex-col items-center justify-center">
-      <div className="flex w-[1024px] flex-col items-center justify-center px-4">
+    <div className="mt-5 flex flex-col items-center justify-center">
+      <div className="flex w-full flex-col items-center justify-center gap-5 px-4 lg:w-[1024px]">
         {/* 투두 상세 페이지 헤더 */}
         <TodoHeader
           todo={todo as Todo}
@@ -75,7 +75,7 @@ const TodoPage = () => {
           onCheckboxChange={handleCheckboxChange}
         />
         {/* 투두 상세 페이지 내용 */}
-        <div className="flex w-full justify-between gap-4">
+        <div className="flex w-full flex-col justify-between gap-4 lg:flex-row">
           {/* 이미지 업로드 */}
           <TodoImageUpload
             todoId={Number(todoId)}
