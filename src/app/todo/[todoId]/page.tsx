@@ -70,6 +70,7 @@ const TodoPage = () => {
   const handleDeleteClick = async () => {
     try {
       await deleteTodo(Number(todoId));
+      queryClient.invalidateQueries({ queryKey: ['todos'] });
       router.push('/');
     } catch (error) {
       console.error('Failed to delete todo:', error);
