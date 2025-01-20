@@ -3,7 +3,7 @@
 import React, { useRef, useState } from 'react';
 import ImageButton from './ImageButton';
 import Image from 'next/image';
-import { PlusIcon } from '@heroicons/react/16/solid';
+import { PencilIcon, PlusIcon } from '@heroicons/react/16/solid';
 import { uploadImage } from '@/app/lib/api/todos';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -81,8 +81,8 @@ const TodoImageUpload = ({ todoId, initialImageUrl }: TodoImageUploadProps) => {
         className="absolute bottom-4 right-4 cursor-pointer"
       >
         <ImageButton
-          icon={<PlusIcon />}
-          variant="white"
+          icon={imageUrl ? <PencilIcon /> : <PlusIcon />}
+          variant={imageUrl ? 'black' : 'white'}
           onClick={handleButtonClick}
         />
       </label>

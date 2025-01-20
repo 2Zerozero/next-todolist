@@ -18,7 +18,9 @@ const ImageButton = ({
       onClick={onClick}
       className={cn(
         'flex h-16 w-16 items-center justify-center rounded-full transition-colors',
-        variant === 'white' ? 'bg-slate-200' : 'bg-slate-900',
+        variant === 'white'
+          ? 'bg-slate-200'
+          : 'border-2 border-slate-900 bg-slate-700',
         className,
       )}
     >
